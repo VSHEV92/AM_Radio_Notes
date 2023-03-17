@@ -128,12 +128,24 @@ classdef (StrictDefaults) AmSignalPLL < matlab.System
             flag = false;
         end
 
-        function out = getOutputSizeImpl(obj)
-            % Return size for each output port
-%             out = [1 1];
+        function [out1, out2] = isOutputFixedSizeImpl(obj)
+            out1 = true;
+            out2 = true;
+        end
 
-            % Example: inherit size from first input port
-            out = [propagatedInputSize(obj,1), propagatedInputSize(obj,1)];
+        function [out1, out2] = isOutputComplexImpl(obj)
+            out1 = false;
+            out2 = false;
+        end
+
+        function [out1, out2] = getOutputDataTypeImpl(obj)
+            out1 = propagatedInputDataType(obj,1);
+            out2 = propagatedInputDataType(obj,1);
+         end
+
+        function [out1, out2] = getOutputSizeImpl(obj)
+            out1 = propagatedInputSize(obj,1);
+            out2 = propagatedInputSize(obj,1);
         end
 
         function icon = getIconImpl(obj)
