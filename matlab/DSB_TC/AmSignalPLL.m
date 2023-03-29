@@ -69,10 +69,10 @@ classdef (StrictDefaults) AmSignalPLL < matlab.System
             FrequencyError = zeros(FrameSize,1);
             
             for n = 1:FrameSize
-                % mixer
+                % умножение сигнала на сигнал от NCO
                 PhaseError = InputFrame(n) * cos(obj.NCOPhase);
 
-                % loop filter
+                % петлевой фильтр
                 kp_out = obj.kp * PhaseError;
                 ki_out = obj.ki * PhaseError + obj.LoopFilterAcc;
                 loop_filter_out = kp_out + ki_out;
