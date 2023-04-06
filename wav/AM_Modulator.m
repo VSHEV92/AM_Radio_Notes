@@ -9,10 +9,10 @@ RateRatio = 10;         % коэффициент увеличения часто
 Amp = 0.1;              % коэффициент усиления перед записью в файл
 Ac = 2;                 % амплитуда несущей
 Fc = 60e3;              % частота несущей
-ModType = "DSB-TC";     % вид модуляции
+ModType = "DSB-SC";     % вид модуляции
 
 InputFile = 'wav/Audio_Source.wav';     % входной файл
-OutputFile = 'wav/Audio_DSB_TC.wav';     % выходной файл
+OutputFile = 'wav/Audio_DSB_SC.wav';     % выходной файл
 
 % объект для считываения отсчетов аудиофайла
 AudioReader = dsp.AudioFileReader(...
