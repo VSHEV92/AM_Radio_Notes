@@ -143,7 +143,7 @@ classdef (StrictDefaults) CostasAmComplexPLL < matlab.System
         end
 
         function [out1, out2] = isOutputComplexImpl(obj)
-            out1 = false;
+            out1 = true;
             out2 = false;
         end
 

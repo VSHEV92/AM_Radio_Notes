@@ -81,7 +81,7 @@ classdef (StrictDefaults) CostasAmSignalPLL < matlab.System
                 InphaseBranch = obj.InphaseFIR(InputFrame(n) * cos(obj.NCOPhase));
 
                 % квадратурная ветвь
-                QuadratureBranch = obj.QuadratureFIR(InputFrame(n) * sin(obj.NCOPhase));
+                QuadratureBranch = - obj.QuadratureFIR(InputFrame(n) * sin(obj.NCOPhase));
 
                 % произведение ветвей
                 LoopInput = InphaseBranch.*QuadratureBranch;
@@ -99,7 +99,7 @@ classdef (StrictDefaults) CostasAmSignalPLL < matlab.System
  
                 % set outputs
                 FrequencyError(n) = loop_filter_out / (2*pi) * obj.SampleFrequency; 
-                OutputFrame(n) = QuadratureBranch;
+                OutputFrame(n) = InphaseBranch;
             end
         end
 
