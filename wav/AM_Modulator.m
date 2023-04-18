@@ -9,10 +9,10 @@ RateRatio = 10;         % коэффициент увеличения часто
 Amp = 0.1;              % коэффициент усиления перед записью в файл
 Ac = 2;                 % амплитуда несущей
 Fc = 60e3;              % частота несущей
-ModType = "DSB-SC";     % вид модуляции
+ModType = "USB-SC";     % вид модуляции
 
 InputFile = 'wav/Audio_Source.wav';     % входной файл
-OutputFile = 'wav/Audio_DSB_SC.wav';     % выходной файл
+OutputFile = 'wav/Audio_USB_SC.wav';     % выходной файл
 
 % объект для считываения отсчетов аудиофайла
 AudioReader = dsp.AudioFileReader(...
@@ -30,6 +30,11 @@ AudioWriter = dsp.AudioFileWriter(...
    OutputFile, ...
    'SampleRate', SignalFs ...
    );
+
+% формирует аналитический сигнал
+HilbertTranform = dsp.AnalyticSignal(...
+    'FilterOrder', 100 ...
+    );
 
 % генератор несущей
 Carrier = dsp.SineWave(...
@@ -53,6 +58,11 @@ for i = 1:FramesNumber
     AudioData = AudioReader();
     AudioData = AudioData(:,1);
 
+    % создание аналитического сигнала для однополосной модуляции 
+     if (ModType == "USB-SC" || ModType == "LSB-SC")
+        AudioData = HilbertTranform(AudioData);
+     end
+
     % увеличение частоты дискретизации аудиосообщения
     MessageData = Upsampler(AudioData);
 
@@ -69,6 +79,14 @@ for i = 1:FramesNumber
         case "DSB-SC"
             AmInphase = MessageData .* CosWave;
             AmQuadrature = MessageData .* SinWave;
+        case "USB-SC"
+            ComplexExp = CosWave + 1j*SinWave;
+            AmInphase = real(MessageData.*ComplexExp);
+            AmQuadrature = imag(MessageData.*ComplexExp);
+        case "LSB-SC"
+            ComplexExp = CosWave + 1j*SinWave;
+            AmInphase = real(conj(MessageData).*ComplexExp);
+            AmQuadrature = imag(conj(MessageData).*ComplexExp);
         otherwise
             error('Unexpected modulation type.')
     end
