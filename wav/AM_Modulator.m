@@ -7,12 +7,12 @@ FramesNumber = 1000;    % число обрабатываемых пачек д�
 AudioFrameSize = 1000;  % количество отсчетов аудиофайла, получаемых за один раз
 RateRatio = 10;         % коэффициент увеличения частоты дискретизации
 Amp = 0.1;              % коэффициент усиления перед записью в файл
-Ac = 2;                 % амплитуда несущей
+Ac = 2;               % амплитуда несущей
 Fc = 60e3;              % частота несущей
-ModType = "USB-SC";     % вид модуляции
+ModType = "USB-TC";     % вид модуляции
 
 InputFile = 'wav/Audio_Source.wav';     % входной файл
-OutputFile = 'wav/Audio_USB_SC.wav';     % выходной файл
+OutputFile = 'wav/Audio_USB_TC_High_Amp.wav';     % выходной файл
 
 % объект для считываения отсчетов аудиофайла
 AudioReader = dsp.AudioFileReader(...
@@ -59,7 +59,7 @@ for i = 1:FramesNumber
     AudioData = AudioData(:,1);
 
     % создание аналитического сигнала для однополосной модуляции 
-     if (ModType == "USB-SC" || ModType == "LSB-SC")
+     if (ModType == "USB-SC" || ModType == "LSB-SC" || ModType == "USB-TC" || ModType == "LSB-TC" )
         AudioData = HilbertTranform(AudioData);
      end
 
@@ -84,6 +84,16 @@ for i = 1:FramesNumber
             AmInphase = real(MessageData.*ComplexExp);
             AmQuadrature = imag(MessageData.*ComplexExp);
         case "LSB-SC"
+            ComplexExp = CosWave + 1j*SinWave;
+            AmInphase = real(conj(MessageData).*ComplexExp);
+            AmQuadrature = imag(conj(MessageData).*ComplexExp);
+        case "USB-TC"
+            MessageData = MessageData + Ac;
+            ComplexExp = CosWave + 1j*SinWave;
+            AmInphase = real(MessageData.*ComplexExp);
+            AmQuadrature = imag(MessageData.*ComplexExp);
+        case "LSB-TC"
+            MessageData = MessageData + Ac;
             ComplexExp = CosWave + 1j*SinWave;
             AmInphase = real(conj(MessageData).*ComplexExp);
             AmQuadrature = imag(conj(MessageData).*ComplexExp);
