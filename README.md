@@ -22,7 +22,7 @@ Matlab LiveScripts и Simulink-модели, демонстрирующие ра
 
 #### Python
 
-TODO
+Jupyter Notebooks, демонстрирующие различные методы формирования и приема АМ-сигналов.
 
 ------
 
