@@ -2,3 +2,4 @@
 *.asv
 *.ipynb_checkpoints
 *.tex
+*__
